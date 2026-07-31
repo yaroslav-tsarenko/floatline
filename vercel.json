@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/sync-catalog",
+      "schedule": "*/7 * * * *"
+    },
+    {
+      "path": "/api/cron/poll-orders",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/sync-fx-rates",
+      "schedule": "0 */12 * * *"
+    },
+    {
+      "path": "/api/cron/check-balance",
+      "schedule": "*/30 * * * *"
+    },
+    {
+      "path": "/api/cron/expire-payments",
+      "schedule": "*/30 * * * *"
+    }
+  ]
+}

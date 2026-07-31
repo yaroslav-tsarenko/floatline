@@ -1,26 +1,170 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Class-based dark mode (next-themes toggles .dark on <html>). */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-signal: var(--signal);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+  --color-focus: var(--focus);
+  --color-plate: var(--plate);
+
+  --color-rarity-consumer: var(--rarity-consumer);
+  --color-rarity-industrial: var(--rarity-industrial);
+  --color-rarity-milspec: var(--rarity-milspec);
+  --color-rarity-restricted: var(--rarity-restricted);
+  --color-rarity-classified: var(--rarity-classified);
+  --color-rarity-covert: var(--rarity-covert);
+  --color-rarity-contraband: var(--rarity-contraband);
+
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Light theme (equal-weight, not an afterthought). */
+:root {
+  --bg: #f5f7f7;
+  --surface: #ffffff;
+  --surface-2: #ebeff0;
+  --border: #dce2e4;
+  --text: #0c0e10;
+  --muted: #5c666d;
+  --signal: #d9500a;
+  --positive: #1e9e5f;
+  --negative: #c93030;
+  --focus: #d9500a;
+  --plate: #e3e8ea;
+
+  --rarity-consumer: #7e93ab;
+  --rarity-industrial: #3b76b8;
+  --rarity-milspec: #3450d6;
+  --rarity-restricted: #6b2fd9;
+  --rarity-classified: #a81fb8;
+  --rarity-covert: #c93030;
+  --rarity-contraband: #a87a16;
+}
+
+.dark {
+  --bg: #0c0e10;
+  --surface: #14171a;
+  --surface-2: #1c2024;
+  --border: #262b30;
+  --text: #e8ebed;
+  --muted: #8a9299;
+  --signal: #ff6a21;
+  --positive: #3fbf7f;
+  --negative: #eb4b4b;
+  --focus: #ff8a4c;
+  --plate: #0a0c0e;
+
+  --rarity-consumer: #b0c3d9;
+  --rarity-industrial: #5e98d9;
+  --rarity-milspec: #4b69ff;
+  --rarity-restricted: #8847ff;
+  --rarity-classified: #d32ce6;
+  --rarity-covert: #eb4b4b;
+  --rarity-contraband: #e4ae39;
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Numbers are always mono + tabular so columns never jitter. */
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  ::selection {
+    background-color: var(--color-signal);
+    color: #fff;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* Kill keyframe motion globally; opacity/transition nuance is handled per
+     component via `motion` (useReducedMotion) in the motion stage. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* --- Decorative + motion utilities ------------------------------------- */
+
+/* Faint blueprint grid, used behind hero/section surfaces. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(120% 100% at 50% 0%, #000 30%, transparent 75%);
+}
+
+/* Continuous horizontal ticker (paused for reduced-motion via the block above). */
+@keyframes fl-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: fl-marquee 40s linear infinite;
+}
+.marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+/* Loading shimmer sweep. */
+@keyframes fl-shimmer {
+  from {
+    background-position: -150% 0;
+  }
+  to {
+    background-position: 150% 0;
+  }
+}
+.animate-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in oklab, var(--color-text) 8%, transparent) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: fl-shimmer 1.6s ease-in-out infinite;
 }
