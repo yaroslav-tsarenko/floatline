@@ -308,12 +308,12 @@ export function SiteHeader({
                 <span className="hidden text-muted sm:inline">Account</span>
               </Link>
             ) : (
-              <a
-                href="/api/auth/steam"
+              <Link
+                href="/signin"
                 className="rounded-md bg-signal px-3 py-1.5 text-sm font-medium text-white hover:brightness-110"
               >
                 Sign in
-              </a>
+              </Link>
             )}
           </div>
         </div>
@@ -542,12 +542,12 @@ export function SiteHeader({
                   Account
                 </Link>
               ) : (
-                <a
-                  href="/api/auth/steam"
+                <Link
+                  href="/signin"
                   className="rounded-md bg-signal px-3 py-1.5 text-sm font-medium text-white"
                 >
                   Sign in
-                </a>
+                </Link>
               )}
             </div>
           </div>

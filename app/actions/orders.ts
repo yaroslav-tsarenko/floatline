@@ -27,7 +27,10 @@ export async function buyItem(
   confirmedPrice: string,
 ): Promise<BuyResult> {
   const user = await getCurrentUser();
-  if (!user) return { ok: false, error: "Please sign in with Steam to buy." };
+  if (!user) return { ok: false, error: "Please sign in to buy." };
+  if (!user.steamId64) {
+    return { ok: false, error: "Link your Steam account before buying." };
+  }
 
   let orderId: string;
   try {

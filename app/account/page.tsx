@@ -20,9 +20,17 @@ const TX_LABEL: Record<string, string> = {
   adjustment: "Adjustment",
 };
 
-export default async function AccountPage() {
+export default async function AccountPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ link?: string }>;
+}) {
   const user = await getCurrentUser();
-  if (!user) redirect("/api/auth/steam");
+  if (!user) redirect("/signin");
+
+  const { link } = await searchParams;
+  const linkTaken = link === "taken";
+  const hasSteam = !!user.steamId64;
 
   const [balance, txs, orders] = await Promise.all([
     getBalance(user.id),
@@ -37,12 +45,35 @@ export default async function AccountPage() {
           <h1 className="font-display text-2xl font-semibold tracking-tight">
             Account
           </h1>
-          <p className="text-sm text-muted">Steam ID {user.steamId64}</p>
+          <p className="text-sm text-muted">{user.email}</p>
         </div>
         <form action={signOut}>
           <button className="text-sm text-muted hover:text-text">Sign out</button>
         </form>
       </div>
+
+      {!hasSteam && (
+        <Surface inset className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-medium">Link your Steam account to buy</p>
+            <p className="text-sm text-muted">
+              Purchases are delivered as Steam trades, so we need your Steam
+              identity before your first order.
+            </p>
+            {linkTaken && (
+              <p className="mt-1 text-sm text-negative">
+                That Steam account is already linked to another user.
+              </p>
+            )}
+          </div>
+          <a
+            href="/api/auth/steam"
+            className="shrink-0 rounded-md bg-signal px-4 py-2 text-center text-sm font-medium text-white hover:brightness-110"
+          >
+            Link Steam
+          </a>
+        </Surface>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Surface className="p-5">
