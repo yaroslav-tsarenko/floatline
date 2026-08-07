@@ -15,6 +15,13 @@
       "when": 1785518017714,
       "tag": "0001_crazy_hammerhead",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786110975252,
+      "tag": "0002_old_franklin_richards",
+      "breakpoints": true
     }
   ]
 }

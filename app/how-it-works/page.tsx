@@ -18,7 +18,7 @@ const STEPS = [
   {
     n: "2",
     title: "Fund your balance",
-    body: "Top up once in USD. You spend from that balance per purchase, so we never touch your card details on a per-skin basis.",
+    body: "Top up once, then spend from that balance per purchase, so we never touch your card details on a per-skin basis.",
   },
   {
     n: "3",

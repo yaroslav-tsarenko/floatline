@@ -1,5 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 
+import type { Currency } from "@/lib/currency";
 import { db } from "@/lib/db";
 import { users, wallets } from "@/lib/db/schema";
 
@@ -40,14 +41,28 @@ export async function getUserByEmail(email: string): Promise<UserRecord | null> 
   return user ?? null;
 }
 
+export interface EmailUserProfile {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string; // YYYY-MM-DD
+  phone: string;
+  streetAddress: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  preferredCurrency?: Currency;
+}
+
 /** Creates an email/password user and their wallet. Caller pre-hashes. */
 export async function createEmailUser(
   email: string,
   passwordHash: string,
+  profile: EmailUserProfile,
 ): Promise<string> {
+  const { preferredCurrency = "USD", ...rest } = profile;
   const [created] = await db
     .insert(users)
-    .values({ email: email.toLowerCase(), passwordHash })
+    .values({ email: email.toLowerCase(), passwordHash, preferredCurrency, ...rest })
     .returning({ id: users.id });
 
   await db.insert(wallets).values({ userId: created.id }).onConflictDoNothing();

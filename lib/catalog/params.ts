@@ -106,7 +106,7 @@ export function parseFilter(sp: SearchParamsInput): CatalogFilter {
     priceMin: num(sp.min),
     priceMax: num(sp.max),
     available: tri(sp.all) === true ? false : true, // ?all=1 shows out of stock too
-    sort: SORTS.includes(sort) ? sort : "discount",
+    sort: SORTS.includes(sort) ? sort : "new",
     cursor: first(sp.cursor) ?? null,
   };
 }
@@ -133,7 +133,7 @@ export function toQuery(
   if (f.priceMin != null) p.set("min", String(f.priceMin));
   if (f.priceMax != null) p.set("max", String(f.priceMax));
   if (!f.available) p.set("all", "1");
-  if (f.sort !== "discount") p.set("sort", f.sort);
+  if (f.sort !== "new") p.set("sort", f.sort);
   if (f.cursor) p.set("cursor", f.cursor);
 
   const s = p.toString();

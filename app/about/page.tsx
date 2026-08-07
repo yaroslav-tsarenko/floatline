@@ -38,7 +38,7 @@ export default function AboutPage() {
         <p>
           We add a small, transparent margin over the aggregated market price.
           There are no per-purchase card fees and no surprise charges at
-          checkout — you fund a USD balance and spend from it.
+          checkout — you fund your balance and spend from it.
         </p>
       </Section>
 

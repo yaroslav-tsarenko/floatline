@@ -3,26 +3,63 @@
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { signIn, signUp, type AuthState } from "@/app/actions/auth";
+import { signIn, type AuthState } from "@/app/actions/auth";
+import { RegisterWizard } from "@/components/auth/register-wizard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 
 type Mode = "signin" | "signup";
 
-function SubmitButton({ mode }: { mode: Mode }) {
+function SignInSubmit() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" loading={pending} className="w-full">
-      {mode === "signin" ? "Sign in" : "Create account"}
+      Sign in
     </Button>
+  );
+}
+
+function SignInForm() {
+  const [state, formAction] = useActionState<AuthState, FormData>(signIn, null);
+  return (
+    <form action={formAction} className="space-y-3">
+      <div className="space-y-1.5">
+        <label htmlFor="email" className="text-xs text-muted">
+          Email
+        </label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          placeholder="you@example.com"
+        />
+      </div>
+      <div className="space-y-1.5">
+        <label htmlFor="password" className="text-xs text-muted">
+          Password
+        </label>
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+          placeholder="Your password"
+        />
+      </div>
+
+      {state?.error && <p className="text-sm text-negative">{state.error}</p>}
+
+      <SignInSubmit />
+    </form>
   );
 }
 
 export function AuthForm() {
   const [mode, setMode] = useState<Mode>("signin");
-  const action = mode === "signin" ? signIn : signUp;
-  const [state, formAction] = useActionState<AuthState, FormData>(action, null);
 
   return (
     <div className="space-y-5">
@@ -42,41 +79,7 @@ export function AuthForm() {
         ))}
       </div>
 
-      <form action={formAction} className="space-y-3">
-        <div className="space-y-1.5">
-          <label htmlFor="email" className="text-xs text-muted">
-            Email
-          </label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            placeholder="you@example.com"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label htmlFor="password" className="text-xs text-muted">
-            Password
-          </label>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete={mode === "signin" ? "current-password" : "new-password"}
-            required
-            minLength={8}
-            placeholder="At least 8 characters"
-          />
-        </div>
-
-        {state?.error && (
-          <p className="text-sm text-negative">{state.error}</p>
-        )}
-
-        <SubmitButton mode={mode} />
-      </form>
+      {mode === "signin" ? <SignInForm /> : <RegisterWizard />}
 
       <div className="flex items-center gap-3 text-xs text-muted">
         <span className="h-px flex-1 bg-border" />

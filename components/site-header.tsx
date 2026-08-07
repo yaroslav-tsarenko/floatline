@@ -169,13 +169,21 @@ export function SiteHeader({
   const [drawerCat, setDrawerCat] = useState<Category | null>(null);
   const [q, setQ] = useState("");
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Condense the header (drop the top strip) once the page scrolls.
+  // Condense the header (drop the top strip) once the page scrolls past the
+  // top. Observing a zero-height sentinel above the sticky header — instead of
+  // reading window.scrollY — avoids the feedback loop where collapsing the
+  // header changed its own height, nudged the scroll offset back across the
+  // threshold, and made the bar flicker at a fixed scroll position.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setScrolled(!entry.isIntersecting),
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   // Close overlays on navigation — adjust during render (no effect) to avoid
@@ -213,7 +221,10 @@ export function SiteHeader({
   const activeNav = nav.find((n) => n.category === openCat);
 
   return (
-    <header className="sticky top-0 z-40">
+    <>
+      {/* Zero-height marker at the top of the flow; drives the collapse. */}
+      <div ref={sentinelRef} aria-hidden className="h-0" />
+      <header className="sticky top-0 z-40">
       {/* Top strip — live stats + currency/theme. Collapses on scroll. */}
       <div
         className={cn(
@@ -224,14 +235,12 @@ export function SiteHeader({
         <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-4">
           <LiveStats stats={stats} />
           <div className="flex items-center gap-2">
-            <a
-              href="https://t.me/floatline"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/support"
               className="hidden text-xs text-muted hover:text-text sm:inline"
             >
               Support
-            </a>
+            </Link>
             <span className="hidden h-4 w-px bg-border sm:block" />
             <CurrencySwitcher />
             <ThemeToggle />
@@ -553,6 +562,7 @@ export function SiteHeader({
           </div>
         </div>
       )}
-    </header>
+      </header>
+    </>
   );
 }

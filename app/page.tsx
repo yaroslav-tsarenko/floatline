@@ -78,7 +78,7 @@ const STEPS = [
   {
     n: "2",
     title: "Top up your balance",
-    body: "Add funds once, in USD. No card details per purchase.",
+    body: "Add funds once and spend from your balance. No card details per purchase.",
   },
   {
     n: "3",
@@ -106,7 +106,7 @@ const REASONS = [
     body: "If a trade falls through, your balance is credited back — no tickets.",
   },
   {
-    title: "Support on Telegram",
+    title: "Support that answers",
     body: "Real answers about float, delivery, and orders.",
   },
 ];
@@ -134,7 +134,7 @@ const FAQ = [
   },
   {
     q: "Which currency am I charged in?",
-    a: "Always USD. EUR and GBP are shown for reference at today's rate; the charge itself is in USD.",
+    a: "The one you pick in the header — USD, EUR, or GBP. Every price, top-up, and purchase is shown and charged in your selected currency at today's rate. Switch anytime.",
   },
 ];
 

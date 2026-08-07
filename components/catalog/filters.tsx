@@ -55,7 +55,7 @@ interface Chip {
 }
 
 /** Removable chips for every active filter dimension. */
-function activeChips(f: CatalogFilter, symbol: string): Chip[] {
+function activeChips(f: CatalogFilter, symbol: string, rate: number): Chip[] {
   const chips: Chip[] = [];
   if (f.q) chips.push({ key: "q", label: `“${f.q}”`, patch: { q: "" } });
   if (f.category)
@@ -90,12 +90,15 @@ function activeChips(f: CatalogFilter, symbol: string): Chip[] {
       label: f.souvenir ? "Souvenir" : "No Souvenir",
       patch: { souvenir: null },
     });
-  if (f.priceMin != null || f.priceMax != null)
+  if (f.priceMin != null || f.priceMax != null) {
+    const lo = round2((f.priceMin ?? 0) * rate);
+    const hi = f.priceMax != null ? symbol + round2(f.priceMax * rate) : "∞";
     chips.push({
       key: "price",
-      label: `${symbol}${f.priceMin ?? 0}–${f.priceMax != null ? symbol + f.priceMax : "∞"}`,
+      label: `${symbol}${lo}–${hi}`,
       patch: { priceMin: null, priceMax: null },
     });
+  }
   return chips;
 }
 
@@ -177,7 +180,7 @@ export function CatalogFilters({
   }, [q, min, max]);
 
   const active = activeFilterCount(filter);
-  const chips = activeChips(filter, symbol);
+  const chips = activeChips(filter, symbol, rate);
 
   return (
     <div className={cn("space-y-6", pending && "opacity-70")}>

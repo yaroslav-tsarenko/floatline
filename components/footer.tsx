@@ -49,13 +49,11 @@ export function Footer() {
             A CS2 skins marketplace. We show the number and fill the order.
           </p>
           <a
-            href="https://t.me/floatline"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="mailto:info@floatline.gg"
             className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-text"
           >
             <span className="size-1.5 rounded-full bg-positive" />
-            Support on Telegram
+            info@floatline.gg
           </a>
         </div>
 
@@ -80,10 +78,7 @@ export function Footer() {
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Floatline. All rights reserved.</p>
-          <p>
-            Not affiliated with Valve. Prices in USD; EUR/GBP shown for
-            reference.
-          </p>
+          <p>Not affiliated with Valve.</p>
         </div>
       </div>
     </footer>
