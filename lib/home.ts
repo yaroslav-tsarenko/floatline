@@ -83,10 +83,10 @@ export const getHomeStats = cache(async (): Promise<HomeStats> => {
   const [agg] = await db
     .select({
       inStock: sql<number>`count(*)::int`,
-      avgDiscount: sql<number>`avg(${discountExpr})`,
+      avgDiscount: sql<number>`avg(${discountExpr}) filter (where ${items.steamPrice} > 0)`,
     })
     .from(items)
-    .where(and(eq(items.isAvailable, true), sql`${items.steamPrice} > 0`));
+    .where(eq(items.isAvailable, true));
 
   // Avg delivery over the last 24h of finished orders (null until we have data).
   const [delivery] = await db
