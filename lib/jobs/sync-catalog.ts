@@ -107,7 +107,7 @@ export async function syncCatalog(): Promise<JobStats> {
     .where(
       and(
         or(isNull(items.syncedAt), lt(items.syncedAt, runStart)),
-        sql`${items.count} <> 0 OR ${items.isAvailable} = true`,
+        sql`(${items.count} <> 0 OR ${items.isAvailable} = true)`,
       ),
     )
     .returning({ marketHashName: items.marketHashName });

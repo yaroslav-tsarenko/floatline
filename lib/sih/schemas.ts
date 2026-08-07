@@ -34,8 +34,18 @@ export const itemValueSchema = z
   .loose();
 export type SihItemValue = z.infer<typeof itemValueSchema>;
 
-export const itemsResponseSchema = z.record(z.string(), itemValueSchema);
-export type SihItemsResponse = z.infer<typeof itemsResponseSchema>;
+const itemsMapSchema = z.record(z.string(), itemValueSchema);
+export type SihItemsResponse = z.infer<typeof itemsMapSchema>;
+
+// The live API wraps the map in an envelope: `{ success, items }`. Older/bare
+// responses may be the map directly. Accept both and always yield the map.
+export const itemsResponseSchema = z.union([
+  z
+    .object({ items: itemsMapSchema })
+    .loose()
+    .transform((r) => r.items),
+  itemsMapSchema,
+]);
 
 export const minItemSchema = z
   .object({
