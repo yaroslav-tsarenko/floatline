@@ -11,19 +11,26 @@ export type UserRecord = typeof users.$inferSelect;
  * Steam is the identity, so we match on `steamId64`. Email is a synthetic
  * placeholder (the schema requires one) until the user provides a real address.
  */
-export async function upsertSteamUser(steamId64: string): Promise<string> {
+export async function upsertSteamUser(
+  steamId64: string,
+  profile?: SteamProfileFields,
+): Promise<string> {
   const [existing] = await db
     .select({ id: users.id })
     .from(users)
     .where(eq(users.steamId64, steamId64));
 
-  if (existing) return existing.id;
+  if (existing) {
+    if (profile) await updateSteamProfile(existing.id, profile);
+    return existing.id;
+  }
 
   const [created] = await db
     .insert(users)
     .values({
       email: `steam-${steamId64}@users.floatline.gg`,
       steamId64,
+      ...profile,
     })
     .returning({ id: users.id });
 
@@ -70,13 +77,20 @@ export async function createEmailUser(
   return created.id;
 }
 
+export interface SteamProfileFields {
+  steamNickname?: string;
+  steamAvatar?: string;
+}
+
 /**
  * Attaches a Steam identity to an existing account. Returns false when that
- * SteamID is already bound to a different user (can't link twice).
+ * SteamID is already bound to a different user (can't link twice). Optionally
+ * persists the profile (nickname/avatar) pulled from the Steam Web API.
  */
 export async function linkSteamToUser(
   userId: string,
   steamId64: string,
+  profile?: SteamProfileFields,
 ): Promise<boolean> {
   const [owner] = await db
     .select({ id: users.id })
@@ -84,6 +98,17 @@ export async function linkSteamToUser(
     .where(eq(users.steamId64, steamId64));
   if (owner && owner.id !== userId) return false;
 
-  await db.update(users).set({ steamId64 }).where(eq(users.id, userId));
+  await db
+    .update(users)
+    .set({ steamId64, ...profile })
+    .where(eq(users.id, userId));
   return true;
+}
+
+/** Persists the Steam profile (nickname/avatar) for a user. */
+export async function updateSteamProfile(
+  userId: string,
+  profile: SteamProfileFields,
+): Promise<void> {
+  await db.update(users).set(profile).where(eq(users.id, userId));
 }

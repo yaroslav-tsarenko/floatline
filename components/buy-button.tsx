@@ -6,7 +6,12 @@ import { useState, useTransition } from "react";
 import { buyItem } from "@/app/actions/orders";
 import { Button } from "@/components/ui/button";
 
-export type BuyState = "guest" | "no_trade" | "insufficient" | "ready";
+export type BuyState =
+  | "guest"
+  | "no_steam"
+  | "no_trade"
+  | "insufficient"
+  | "ready";
 
 export function BuyButton({
   marketHashName,
@@ -22,11 +27,22 @@ export function BuyButton({
 
   if (state === "guest") {
     return (
+      <Link
+        href="/signin"
+        className="inline-flex h-10 w-full items-center justify-center rounded-md bg-signal px-4 text-sm font-medium text-white hover:brightness-110"
+      >
+        Sign in to buy
+      </Link>
+    );
+  }
+
+  if (state === "no_steam") {
+    return (
       <a
         href="/api/auth/steam"
         className="inline-flex h-10 w-full items-center justify-center rounded-md bg-signal px-4 text-sm font-medium text-white hover:brightness-110"
       >
-        Sign in with Steam to buy
+        Link Steam to buy
       </a>
     );
   }

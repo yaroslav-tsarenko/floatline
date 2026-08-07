@@ -1,8 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { getSessionUserId, setSessionCookie } from "@/lib/auth/session";
-import { verifyCallback } from "@/lib/auth/steam";
-import { linkSteamToUser, upsertSteamUser } from "@/lib/auth/users";
+import { fetchSteamProfile, verifyCallback } from "@/lib/auth/steam";
+import {
+  linkSteamToUser,
+  upsertSteamUser,
+  type SteamProfileFields,
+} from "@/lib/auth/users";
 
 export const dynamic = "force-dynamic";
 
@@ -18,14 +22,19 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.redirect(new URL("/?auth=failed", req.nextUrl.origin));
   }
 
+  const profile = await fetchSteamProfile(steamId);
+  const profileFields: SteamProfileFields | undefined = profile
+    ? { steamNickname: profile.nickname, steamAvatar: profile.avatar }
+    : undefined;
+
   const currentUserId = await getSessionUserId();
   if (currentUserId) {
-    const linked = await linkSteamToUser(currentUserId, steamId);
+    const linked = await linkSteamToUser(currentUserId, steamId, profileFields);
     const dest = linked ? "/account" : "/account?link=taken";
     return NextResponse.redirect(new URL(dest, req.nextUrl.origin));
   }
 
-  const userId = await upsertSteamUser(steamId);
+  const userId = await upsertSteamUser(steamId, profileFields);
   await setSessionCookie(userId);
 
   return NextResponse.redirect(new URL("/account", req.nextUrl.origin));

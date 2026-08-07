@@ -22,6 +22,13 @@
       "when": 1786110975252,
       "tag": "0002_old_franklin_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786112890777,
+      "tag": "0003_steam_profile",
+      "breakpoints": true
     }
   ]
 }

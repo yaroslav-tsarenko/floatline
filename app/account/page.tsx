@@ -41,11 +41,20 @@ export default async function AccountPage({
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-4 py-10">
       <div className="flex items-start justify-between">
-        <div>
-          <h1 className="font-display text-2xl font-semibold tracking-tight">
-            Account
-          </h1>
-          <p className="text-sm text-muted">{user.email}</p>
+        <div className="flex items-center gap-3">
+          {user.steamAvatar && (
+            <img
+              src={user.steamAvatar}
+              alt=""
+              className="size-12 rounded-full border border-border"
+            />
+          )}
+          <div>
+            <h1 className="font-display text-2xl font-semibold tracking-tight">
+              {user.steamNickname ?? "Account"}
+            </h1>
+            <p className="text-sm text-muted">{user.email}</p>
+          </div>
         </div>
         <form action={signOut}>
           <button className="text-sm text-muted hover:text-text">Sign out</button>

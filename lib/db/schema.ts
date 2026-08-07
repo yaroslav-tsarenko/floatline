@@ -149,6 +149,8 @@ export const users = pgTable("users", {
   country: text("country"),
   postalCode: text("postal_code"),
   steamId64: text("steam_id64"),
+  steamNickname: text("steam_nickname"),
+  steamAvatar: text("steam_avatar"),
   tradeToken: text("trade_token"),
   tradeUrl: text("trade_url"),
   tradeUrlUpdatedAt: timestamp("trade_url_updated_at", { withTimezone: true }),

@@ -2,6 +2,8 @@
 // Steam, which redirects back with signed params we validate by echoing them
 // back to Steam with `openid.mode=check_authentication`. No API key required.
 
+import { env } from "@/lib/env";
+
 const STEAM_OPENID = "https://steamcommunity.com/openid/login";
 const STEAM_IDENTIFIER = "https://steamcommunity.com/openid/id/";
 const CLAIMED_ID_RE =
@@ -52,6 +54,39 @@ export async function verifyCallback(
   const text = await res.text();
 
   return /is_valid\s*:\s*true/i.test(text) ? steamId : null;
+}
+
+export type SteamProfile = { nickname: string; avatar: string };
+
+/**
+ * Fetches the public persona name and avatar for a SteamID64 via the Steam Web
+ * API. Requires STEAM_API_KEY; returns null when the key is absent or the call
+ * fails, so callers can degrade gracefully (linking still succeeds).
+ */
+export async function fetchSteamProfile(
+  steamId64: string,
+): Promise<SteamProfile | null> {
+  if (!env.STEAM_API_KEY) return null;
+
+  const url = new URL(
+    "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/",
+  );
+  url.searchParams.set("key", env.STEAM_API_KEY);
+  url.searchParams.set("steamids", steamId64);
+
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const player = data?.response?.players?.[0];
+    if (!player) return null;
+    return {
+      nickname: player.personaname ?? "",
+      avatar: player.avatarfull ?? player.avatarmedium ?? "",
+    };
+  } catch {
+    return null;
+  }
 }
 
 export { STEAM_IDENTIFIER };

@@ -70,7 +70,9 @@ export default async function ItemPage({
 
   let buyState: BuyState = "guest";
   if (user) {
-    if (!user.steamId64 || !user.tradeToken) {
+    if (!user.steamId64) {
+      buyState = "no_steam";
+    } else if (!user.tradeToken) {
       buyState = "no_trade";
     } else if (
       item.sellPrice != null &&

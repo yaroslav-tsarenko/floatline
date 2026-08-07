@@ -21,6 +21,8 @@ export interface HeaderStats {
 export interface HeaderUser {
   email: string;
   hasSteam: boolean;
+  steamNickname: string | null;
+  steamAvatar: string | null;
 }
 
 interface SiteHeaderProps {
@@ -314,7 +316,16 @@ export function SiteHeader({
                 {balance != null && (
                   <Money usd={balance} className="font-medium text-signal" />
                 )}
-                <span className="hidden text-muted sm:inline">Account</span>
+                {user.steamAvatar ? (
+                  <img
+                    src={user.steamAvatar}
+                    alt=""
+                    className="size-6 rounded-full"
+                  />
+                ) : null}
+                <span className="hidden text-muted sm:inline">
+                  {user.steamNickname ?? "Account"}
+                </span>
               </Link>
             ) : (
               <Link

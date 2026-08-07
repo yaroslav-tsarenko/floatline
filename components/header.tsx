@@ -16,7 +16,16 @@ export async function Header() {
     <SiteHeader
       stats={stats}
       nav={nav}
-      user={user ? { email: user.email, hasSteam: !!user.steamId64 } : null}
+      user={
+        user
+          ? {
+              email: user.email,
+              hasSteam: !!user.steamId64,
+              steamNickname: user.steamNickname,
+              steamAvatar: user.steamAvatar,
+            }
+          : null
+      }
       balance={balance != null ? Number(balance) : null}
       isAdmin={isAdmin(user)}
     />
