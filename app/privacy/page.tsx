@@ -57,8 +57,8 @@ export default function PrivacyPage() {
       <Section heading="Your choices">
         <p>
           You can request access to or deletion of your personal data by
-          contacting us on Telegram. Some records must be retained where the law
-          requires it.
+          contacting us at info@floatline.gg. Some records must be retained
+          where the law requires it.
         </p>
       </Section>
     </ContentPage>

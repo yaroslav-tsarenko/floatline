@@ -35,14 +35,12 @@ export default function RefundsPage() {
       <Section heading="Balance withdrawals">
         <p>
           Your balance is meant to be spent on skins. If you need to withdraw an
-          unspent balance, contact us on{" "}
+          unspent balance, contact us at{" "}
           <a
-            href="https://t.me/floatline"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="mailto:info@floatline.gg"
             className="text-signal hover:underline"
           >
-            Telegram
+            info@floatline.gg
           </a>{" "}
           and we&apos;ll help, subject to anti-fraud checks.
         </p>

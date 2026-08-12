@@ -38,7 +38,7 @@ export default function SupportPage() {
   return (
     <ContentPage
       title="Support"
-      intro="Answers to the common questions. Still stuck? We're one message away on Telegram."
+      intro="Answers to the common questions. Still stuck? We're one email away."
     >
       <div className="rounded-lg border border-border bg-surface-2 p-5">
         <p className="font-medium">Talk to a human</p>
@@ -47,12 +47,10 @@ export default function SupportPage() {
           hour.
         </p>
         <a
-          href="https://t.me/floatline"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="mailto:info@floatline.gg"
           className="mt-3 inline-block rounded-md bg-signal px-4 py-2 text-sm font-medium text-white hover:brightness-110"
         >
-          Message us on Telegram
+          Email us
         </a>
       </div>
 
