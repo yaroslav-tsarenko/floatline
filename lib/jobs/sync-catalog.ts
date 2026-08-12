@@ -16,6 +16,16 @@ function toNumeric(value: number | null | undefined): string | null {
   return value == null || !Number.isFinite(value) ? null : String(value);
 }
 
+/**
+ * SIH returns either a Steam icon hash or a full URL to its own hotlink-blocked
+ * CDN. Only keep bare Steam hashes; URLs are dropped so the image backfill can
+ * fill a usable Steam hash instead.
+ */
+function steamHashOnly(image: string | null | undefined): string | null {
+  if (!image || /^https?:\/\//i.test(image)) return null;
+  return image;
+}
+
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
@@ -58,7 +68,7 @@ export async function syncCatalog(): Promise<JobStats> {
       rarity,
       rarityColor: v.color ?? colorForRarity(rarity),
       phase: v.phase ?? parsed.phase,
-      imageHash: v.image ?? null,
+      imageHash: steamHashOnly(v.image),
       costPrice: toNumeric(cost),
       sellPrice: cost != null ? toNumeric(computeSellPrice(cost)) : null,
       steamPrice: toNumeric(v.steam ?? null),

@@ -5,7 +5,17 @@ import { cn } from "@/lib/cn";
 const STEAM_IMAGE_BASE =
   "https://community.steamstatic.com/economy/image";
 
-export function steamImageUrl(imageHash: string, size = "360fx360f"): string {
+/**
+ * Build a Steam economy image URL from an icon hash. Returns null when the
+ * stored value isn't a Steam hash (e.g. SIH's own CDN URLs, which are
+ * hotlink-protected and 403), so the caller shows the fallback plate instead
+ * of a broken image.
+ */
+export function steamImageUrl(
+  imageHash: string,
+  size = "360fx360f",
+): string | null {
+  if (/^https?:\/\//i.test(imageHash)) return null;
   return `${STEAM_IMAGE_BASE}/${imageHash}/${size}`;
 }
 
@@ -31,6 +41,7 @@ export function SkinImage({
   className?: string;
 }) {
   const tint = rarityColor ?? "var(--muted)";
+  const src = imageHash ? steamImageUrl(imageHash) : null;
 
   return (
     <div
@@ -42,9 +53,9 @@ export function SkinImage({
         backgroundImage: `radial-gradient(120% 90% at 50% 15%, ${tint}22, transparent 70%)`,
       }}
     >
-      {imageHash ? (
+      {src ? (
         <Image
-          src={steamImageUrl(imageHash)}
+          src={src}
           alt={name}
           fill
           sizes={sizes ?? "(max-width: 640px) 50vw, 200px"}
