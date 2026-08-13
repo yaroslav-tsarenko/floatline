@@ -1,12 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-import { ContentPage, Section } from "@/components/content-page";
+import { CompanyDetails, ContentPage, Section } from "@/components/content-page";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "Floatline is a CS2 skins marketplace built around one idea: show the real number and fill the order.",
+  description: `${SITE.name} is a CS2 skins marketplace built around one idea: show the real number and fill the order.`,
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {
@@ -49,6 +50,11 @@ export default function AboutPage() {
           endorsed by Valve.
         </p>
       </Section>
+
+      <CompanyDetails
+        heading="Who operates Floatline"
+        intro="Floatline is operated by an Estonian company, registered in the Estonian Commercial Register."
+      />
 
       <p className="text-sm text-muted">
         Questions? Reach us on{" "}

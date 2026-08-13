@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
 
-import { ContentPage, Section } from "@/components/content-page";
+import { CompanyDetails, ContentPage, Section } from "@/components/content-page";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "The terms that govern your use of Floatline.",
+  description: `The terms that govern your use of ${SITE.name}, operated by ${SITE.company.legalName}.`,
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {
   return (
     <ContentPage
       title="Terms of Service"
-      intro="These terms govern your use of Floatline. By creating an account or making a purchase, you agree to them."
+      intro={`These terms govern your use of ${SITE.name}, operated by ${SITE.company.legalName}. By creating an account or making a purchase, you agree to them.`}
       updated="July 2026"
     >
       <Section heading="1. Accounts">
@@ -71,6 +73,11 @@ export default function TermsPage() {
           reflected in the &quot;last updated&quot; date above.
         </p>
       </Section>
+
+      <CompanyDetails
+        heading="8. Operator"
+        intro={`${SITE.name} is operated by the company below. These terms form an agreement between you and this company.`}
+      />
     </ContentPage>
   );
 }

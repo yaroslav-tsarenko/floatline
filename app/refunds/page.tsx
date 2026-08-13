@@ -1,11 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-import { ContentPage, Section } from "@/components/content-page";
+import { CompanyDetails, ContentPage, Section } from "@/components/content-page";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Refund Policy",
-  description: "When and how refunds happen on Floatline.",
+  description: `When and how refunds happen on ${SITE.name}.`,
+  alternates: { canonical: "/refunds" },
 };
 
 export default function RefundsPage() {
@@ -37,10 +39,10 @@ export default function RefundsPage() {
           Your balance is meant to be spent on skins. If you need to withdraw an
           unspent balance, contact us at{" "}
           <a
-            href="mailto:info@floatline.gg"
+            href={`mailto:${SITE.contactEmail}`}
             className="text-signal hover:underline"
           >
-            info@floatline.gg
+            {SITE.contactEmail}
           </a>{" "}
           and we&apos;ll help, subject to anti-fraud checks.
         </p>
@@ -53,6 +55,11 @@ export default function RefundsPage() {
           overpay because of a stale price.
         </p>
       </Section>
+
+      <CompanyDetails
+        heading="Operator"
+        intro={`${SITE.name} is operated by the company below. Refunds are credited to your on-site balance held with this company.`}
+      />
 
       <p className="text-sm text-muted">
         More questions? See{" "}

@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import { AmbientField } from "@/components/decor/ambient-field";
+import { FrameCorners } from "@/components/decor/frame-corners";
+import { SectionRule } from "@/components/decor/section-rule";
 import { FloatAxis } from "@/components/float-axis";
 import { FloatFinder } from "@/components/home/float-finder";
 import { LiveTicker } from "@/components/home/live-ticker";
@@ -163,13 +166,22 @@ export default async function HomePage() {
 
   return (
     <div className="relative mx-auto max-w-7xl space-y-16 px-4 py-10">
+      {/* Ambient decorative background (glows, drifting glyphs, grain) */}
+      <AmbientField />
       {/* Decorative blueprint grid behind the hero */}
       <div
         aria-hidden
         className="bg-grid pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px]"
       />
       {/* Hero */}
-      <section className="space-y-6">
+      <section className="relative space-y-6">
+        {/* Ghost float readout watermark behind the headline */}
+        <span
+          aria-hidden
+          className="num pointer-events-none absolute -top-6 right-0 -z-10 select-none text-7xl font-bold text-border/40 sm:text-8xl"
+        >
+          0.1847
+        </span>
         <p className="flex items-center gap-2 text-xs uppercase tracking-widest text-signal">
           <span className="h-px w-8 bg-signal/50" />
           CS2 skins · at the real number
@@ -177,7 +189,8 @@ export default async function HomePage() {
         <h1 className="max-w-3xl font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
           Buy the float you want. Pay less than Steam.
         </h1>
-        <Surface className="p-5 sm:p-8">
+        <Surface className="relative overflow-hidden p-5 sm:p-8">
+          <FrameCorners />
           <FloatAxis value={0.1847} />
         </Surface>
         <div className="max-w-2xl">
@@ -216,6 +229,8 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <SectionRule label="§ 01 · live feed" />
+
       {/* Live purchases */}
       <LiveTicker purchases={live} />
 
@@ -246,6 +261,8 @@ export default async function HomePage() {
 
       {/* Market analytics */}
       <MarketAnalytics series={series} />
+
+      <SectionRule label="§ 02 · index" />
 
       {/* Categories */}
       <Reveal className="space-y-4">
@@ -307,6 +324,8 @@ export default async function HomePage() {
       {/* Float finder */}
       <FloatFinder />
 
+      <SectionRule label="§ 03 · protocol" />
+
       {/* How it works */}
       <Reveal className="space-y-4">
         <h2 className="font-display text-2xl font-semibold tracking-tight">
@@ -354,6 +373,8 @@ export default async function HomePage() {
           </div>
         </Reveal>
       )}
+
+      <SectionRule label="§ 04 · faq" />
 
       {/* FAQ */}
       <Reveal className="space-y-4">

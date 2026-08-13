@@ -1,6 +1,9 @@
 export type Currency = "USD" | "EUR" | "GBP";
 
-export const CURRENCIES = ["USD", "EUR", "GBP"] as const;
+export const CURRENCIES = ["EUR", "USD", "GBP"] as const;
+
+/** Default display currency shown to users before they pick one. */
+export const DEFAULT_CURRENCY: Currency = "EUR";
 
 export const CURRENCY_SYMBOL: Record<Currency, string> = {
   USD: "$",

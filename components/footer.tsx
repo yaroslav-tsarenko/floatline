@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Wordmark } from "@/components/wordmark";
+import { COMPANY_ADDRESS_INLINE, SITE } from "@/lib/site";
 
 const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
@@ -49,11 +50,11 @@ export function Footer() {
             A CS2 skins marketplace. We show the number and fill the order.
           </p>
           <a
-            href="mailto:info@floatline.gg"
+            href={`mailto:${SITE.contactEmail}`}
             className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-text"
           >
             <span className="size-1.5 rounded-full bg-positive" />
-            info@floatline.gg
+            {SITE.contactEmail}
           </a>
         </div>
 
@@ -76,9 +77,18 @@ export function Footer() {
       </div>
 
       <div className="border-t border-border">
-        <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Floatline. All rights reserved.</p>
-          <p>Not affiliated with Valve.</p>
+        <div className="mx-auto max-w-7xl space-y-1 px-4 py-4 text-xs text-muted">
+          <p className="text-text/80">
+            {SITE.company.legalName} · Registry code {SITE.company.registryCode}
+          </p>
+          <address className="not-italic">{COMPANY_ADDRESS_INLINE}</address>
+          <div className="flex flex-col gap-1 pt-1 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              © {new Date().getFullYear()} {SITE.company.legalName}. All rights
+              reserved.
+            </p>
+            <p>Not affiliated with Valve.</p>
+          </div>
         </div>
       </div>
     </footer>

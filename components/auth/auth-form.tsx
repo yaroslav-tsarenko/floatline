@@ -80,19 +80,6 @@ export function AuthForm() {
       </div>
 
       {mode === "signin" ? <SignInForm /> : <RegisterWizard />}
-
-      <div className="flex items-center gap-3 text-xs text-muted">
-        <span className="h-px flex-1 bg-border" />
-        or
-        <span className="h-px flex-1 bg-border" />
-      </div>
-
-      <a
-        href="/api/auth/steam"
-        className="flex h-10 w-full items-center justify-center gap-2 rounded-md border border-border bg-surface text-sm font-medium hover:bg-surface-2"
-      >
-        Continue with Steam
-      </a>
     </div>
   );
 }

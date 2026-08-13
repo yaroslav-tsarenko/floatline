@@ -149,6 +149,53 @@
   );
 }
 
+/* Soft radial glow blooms — ambient rarity/signal light behind content. */
+.glow {
+  border-radius: 9999px;
+  filter: blur(64px);
+}
+
+/* Film grain — a barely-there texture layer over the ambient background. */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+}
+
+/* Blueprint ruler strip — repeating measurement ticks for section dividers. */
+.bg-ruler {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-border) 0 1px,
+    transparent 1px 12px
+  );
+}
+
+/* Slow ambient drift for decorative glyphs (killed by reduced-motion above). */
+@keyframes fl-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+.animate-drift {
+  animation: fl-drift 15s ease-in-out infinite;
+}
+@keyframes fl-drift-2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 11px, 0);
+  }
+}
+.animate-drift-2 {
+  animation: fl-drift-2 19s ease-in-out infinite;
+}
+
 /* Loading shimmer sweep. */
 @keyframes fl-shimmer {
   from {

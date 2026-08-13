@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 
-import { ContentPage, Section } from "@/components/content-page";
+import { CompanyDetails, ContentPage, Section } from "@/components/content-page";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "What data Floatline collects and how we use it.",
+  description: `What data ${SITE.name} collects and how we use it, and how to reach ${SITE.company.legalName} about your personal data.`,
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {
@@ -57,10 +59,21 @@ export default function PrivacyPage() {
       <Section heading="Your choices">
         <p>
           You can request access to or deletion of your personal data by
-          contacting us at info@floatline.gg. Some records must be retained
-          where the law requires it.
+          contacting us at{" "}
+          <a
+            href={`mailto:${SITE.contactEmail}`}
+            className="text-signal hover:underline"
+          >
+            {SITE.contactEmail}
+          </a>
+          . Some records must be retained where the law requires it.
         </p>
       </Section>
+
+      <CompanyDetails
+        heading="Data controller"
+        intro={`${SITE.name} is operated by the company below, which acts as the data controller for the personal data described in this policy.`}
+      />
     </ContentPage>
   );
 }

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 
 import { ContentPage, Section } from "@/components/content-page";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Support",
   description: "Get help with orders, delivery, float, and your balance.",
+  alternates: { canonical: "/support" },
 };
 
 const FAQ = [
@@ -29,8 +31,8 @@ const FAQ = [
     a: "The trade link is how the seller sends you the item. You can paste it in your account settings.",
   },
   {
-    q: "Which currency am I charged in?",
-    a: "Always USD. EUR and GBP are shown for reference at today's rate; the charge itself is in USD.",
+    q: "Which currency are prices shown in?",
+    a: "Euro (€) by default. You can switch to USD or GBP anytime; amounts are converted at today's rate.",
   },
 ];
 
@@ -47,7 +49,7 @@ export default function SupportPage() {
           hour.
         </p>
         <a
-          href="mailto:info@floatline.gg"
+          href={`mailto:${SITE.contactEmail}`}
           className="mt-3 inline-block rounded-md bg-signal px-4 py-2 text-sm font-medium text-white hover:brightness-110"
         >
           Email us

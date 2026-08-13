@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "How it works",
   description:
     "How buying CS2 skins on Floatline works — from picking a float to accepting the trade in Steam.",
+  alternates: { canonical: "/how-it-works" },
 };
 
 const STEPS = [
