@@ -190,13 +190,6 @@ export default function TermsPage() {
           billing information, conceal the true payer or beneficiary, or initiate
           an unjustified chargeback for a correctly delivered Item.
         </p>
-        <p>
-          Further terms are stated in the{" "}
-          <Link href="/payments" className="text-signal hover:underline">
-            Payment Policy
-          </Link>
-          .
-        </p>
       </Section>
 
       <Section heading="10. Delivery">

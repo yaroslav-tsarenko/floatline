@@ -89,12 +89,6 @@ export default function LegalPage() {
             ;
           </li>
           <li>
-            <Link href="/payments" className="text-signal hover:underline">
-              Payment Policy
-            </Link>
-            ;
-          </li>
-          <li>
             <Link href="/delivery" className="text-signal hover:underline">
               Digital Item Delivery Policy
             </Link>
