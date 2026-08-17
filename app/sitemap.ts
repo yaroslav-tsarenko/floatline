@@ -14,7 +14,11 @@ const ROUTES: {
   { path: "/support", changeFrequency: "monthly", priority: 0.5 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/cookies", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/payments", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/delivery", changeFrequency: "yearly", priority: 0.3 },
   { path: "/refunds", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/legal", changeFrequency: "yearly", priority: 0.3 },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
