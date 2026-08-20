@@ -9,6 +9,7 @@ import { Surface } from "@/components/ui/surface";
 import { getOrderForUser } from "@/lib/account";
 import { getCurrentUser } from "@/lib/auth/session";
 import { itemSlug } from "@/lib/catalog/slug";
+import { isOpenStatus, reconcileOrderNow } from "@/lib/orders/lazy";
 
 export const metadata: Metadata = { title: "Order" };
 
@@ -23,8 +24,15 @@ export default async function OrderPage({
   if (!user) redirect("/api/auth/steam");
 
   const { id } = await params;
-  const data = await getOrderForUser(user.id, id);
+  let data = await getOrderForUser(user.id, id);
   if (!data) notFound();
+
+  // Pull the latest state from SIH on view for in-flight orders (replaces the
+  // poll cron), then re-read so the page reflects any transition or refund.
+  if (isOpenStatus(data.order.status)) {
+    await reconcileOrderNow(id);
+    data = (await getOrderForUser(user.id, id)) ?? data;
+  }
 
   const { order, events } = data;
   const refunded = REFUNDED.has(order.status);

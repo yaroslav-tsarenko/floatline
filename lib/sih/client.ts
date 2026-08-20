@@ -4,6 +4,7 @@ import { SihApiError, SihError, SihHttpError } from "./errors";
 import {
   createOrderResponseSchema,
   itemsResponseSchema,
+  minItemResponseSchema,
   minItemSchema,
   orderSchema,
   ordersResponseSchema,
@@ -147,9 +148,16 @@ export const sih = {
   },
 
   async getMinItem(item: string, appId?: number): Promise<SihMinItem> {
-    return minItemSchema.parse(
+    const parsed = minItemResponseSchema.parse(
       await getJson("/get-min-item", { item, appId: appId ?? env.SIH_APP_ID }),
     );
+    // Envelope form yields a name->value map; pick the requested item (fall
+    // back to the sole entry). Bare form is already a min-item.
+    if (parsed && typeof parsed === "object" && !("price" in parsed)) {
+      const map = parsed as Record<string, SihMinItem>;
+      return map[item] ?? Object.values(map)[0] ?? {};
+    }
+    return parsed as SihMinItem;
   },
 
   async createOrder(input: CreateOrderInput): Promise<CreateOrderResult> {

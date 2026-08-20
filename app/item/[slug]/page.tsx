@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Surface } from "@/components/ui/surface";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getBalance } from "@/lib/wallet/ledger";
+import { getLivePrice } from "@/lib/catalog/live-price";
 import { itemSlug, slugToMarketHashName } from "@/lib/catalog/slug";
 import {
   getItem,
@@ -61,12 +62,26 @@ export default async function ItemPage({
   const item = await getItem(marketHashName);
   if (!item) notFound();
 
-  const [history, variants, similar, user] = await Promise.all([
+  const [history, variants, similar, user, live] = await Promise.all([
     getPriceHistory(marketHashName),
     getVariants(item),
     getSimilar(item),
     getCurrentUser(),
+    getLivePrice(marketHashName),
   ]);
+
+  // Live per-item price for the client viewing this skin: fetched straight from
+  // SIH on demand (no DB write, no catalog sync). Falls back to the stored price
+  // when SIH is unreachable so the page always renders a number.
+  if (live) {
+    item.sellPrice = live.sellPrice;
+    item.count = live.count;
+    item.isAvailable = live.isAvailable;
+    item.discount =
+      item.steamPrice != null && item.steamPrice > 0
+        ? (item.steamPrice - live.sellPrice) / item.steamPrice
+        : item.discount;
+  }
 
   let buyState: BuyState = "guest";
   if (user) {

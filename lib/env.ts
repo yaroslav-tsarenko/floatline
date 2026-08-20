@@ -42,8 +42,6 @@ const schema = z.object({
   STEAM_API_KEY: z.string().optional(),
   ADMIN_STEAM_IDS: csv.default([]),
 
-  CRON_SECRET: z.string().min(1),
-  CRON_IN_PROCESS: boolFromString.default(false),
   APP_URL: z.url().default("https://floatline.gg"),
 
   ALERT_TELEGRAM_BOT_TOKEN: z.string().optional(),

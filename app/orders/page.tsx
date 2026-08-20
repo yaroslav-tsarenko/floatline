@@ -7,12 +7,15 @@ import { OrderStatusBadge } from "@/components/order-status-badge";
 import { SkinImage } from "@/components/skin-image";
 import { getUserOrders } from "@/lib/account";
 import { getCurrentUser } from "@/lib/auth/session";
+import { reconcileUserOrders } from "@/lib/orders/lazy";
 
 export const metadata: Metadata = { title: "Orders" };
 
 export default async function OrdersPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/api/auth/steam");
+
+  reconcileUserOrders(user.id);
 
   const orders = await getUserOrders(user.id, 100);
 

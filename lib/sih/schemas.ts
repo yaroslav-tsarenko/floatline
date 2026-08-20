@@ -58,6 +58,17 @@ export const minItemSchema = z
   .loose();
 export type SihMinItem = z.infer<typeof minItemSchema>;
 
+// get-min-item wraps the value in `{ success, items: { "<name>": {...} } }`.
+// Accept that envelope (yielding the requested item's value) or a bare
+// min-item object.
+export const minItemResponseSchema = z.union([
+  z
+    .object({ items: z.record(z.string(), minItemSchema) })
+    .loose()
+    .transform((r) => r.items),
+  minItemSchema,
+]);
+
 export const protectionSchema = z
   .object({
     status: z.string().nullish(),

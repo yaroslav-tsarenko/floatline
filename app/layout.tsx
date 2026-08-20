@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { getCurrency } from "@/lib/currency.server";
 import { fontVariables } from "@/lib/fonts";
 import { getFxRates } from "@/lib/fx";
+import { ensureFxFresh } from "@/lib/jobs/lazy";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -65,6 +66,8 @@ export const viewport: Viewport = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  ensureFxFresh();
+
   const [currency, rates] = await Promise.all([getCurrency(), getFxRates()]);
 
   const orgJsonLd = {

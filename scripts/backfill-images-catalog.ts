@@ -16,13 +16,28 @@ import { eq, isNull } from "drizzle-orm";
 import { db, pool } from "@/lib/db";
 import { items } from "@/lib/db/schema";
 
-const CATALOG_URL =
-  "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/skins.json";
+// ByMykel splits the catalog across one endpoint per item family. skins.json
+// covers weapons/knives/gloves; the rest carry stickers, graffiti, music kits,
+// pins, cases, capsules, etc. — everything that otherwise renders "no image".
+const API_BASE =
+  "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/";
+const ENDPOINTS = [
+  "skins",
+  "stickers",
+  "collectibles",
+  "keychains",
+  "graffiti",
+  "patches",
+  "music_kits",
+  "agents",
+  "crates",
+];
 const ECON_PREFIX = "/economy/image/";
 
 interface CatalogSkin {
   name?: string;
   image?: string;
+  phase?: string | null;
 }
 
 /** Pull the steam economy icon hash out of a full catalog image URL. */
@@ -42,17 +57,48 @@ function baseName(marketHashName: string): string {
     .trim();
 }
 
-async function main() {
-  const res = await fetch(CATALOG_URL);
-  if (!res.ok) throw new Error(`catalog fetch ${res.status}`);
-  const catalog = (await res.json()) as CatalogSkin[];
+const WEAR = /\s*\((?:Factory New|Minimal Wear|Field-Tested|Well-Worn|Battle-Scarred)\)\s*$/;
 
-  // name -> hash. Also index by base name so phase variants ("... (Phase 2)")
-  // still resolve to their shared icon.
+/**
+ * Normalize a name so a phase variant matches its catalog entry while keeping
+ * the phase distinct. ByMykel writes "Doppler (Phase 2)"; our market_hash_name
+ * writes "Doppler Phase 2 (Minimal Wear)". Dropping only the wear paren and the
+ * parens *around* the phase/gem (not the phase itself) makes both collapse to
+ * "Doppler Phase 2", preserving per-phase images that baseName would lose.
+ */
+function normalize(name: string): string {
+  return name
+    .replace(WEAR, "")
+    .replace(/StatTrak™ /, "")
+    .replace(/Souvenir /, "")
+    .replace(/[★()]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+async function main() {
+  const catalog: CatalogSkin[] = [];
+  for (const ep of ENDPOINTS) {
+    const res = await fetch(API_BASE + ep + ".json");
+    if (!res.ok) throw new Error(`catalog fetch ${ep} ${res.status}`);
+    const part = (await res.json()) as CatalogSkin[];
+    catalog.push(...part);
+  }
+
+  // Two indexes: `byNorm` keeps the phase/gem distinct (Doppler Phase 2 vs Ruby
+  // resolve to different icons); `byName` on base name is the looser fallback
+  // for anything the normalized form misses.
+  const byNorm = new Map<string, string>();
   const byName = new Map<string, string>();
   for (const s of catalog) {
     const hash = hashFromImage(s.image);
     if (!s.name || !hash) continue;
+    // ByMykel keeps the phase/gem in a separate field with the name identical
+    // across phases. Fold it into the name so "Doppler" + "Phase 2" indexes as
+    // "Doppler Phase 2", matching how our market_hash_name spells it.
+    const withPhase = s.phase ? `${s.name} ${s.phase}` : s.name;
+    const norm = normalize(withPhase);
+    if (!byNorm.has(norm)) byNorm.set(norm, hash);
     if (!byName.has(s.name)) byName.set(s.name, hash);
     const base = baseName(s.name);
     if (!byName.has(base)) byName.set(base, hash);
@@ -70,6 +116,8 @@ async function main() {
   for (const r of rows) {
     const base = baseName(r.name);
     const hash =
+      // Phase/gem-precise first, then base name, then prefix scan.
+      byNorm.get(normalize(r.name)) ??
       byName.get(base) ??
       // Prefix fallback: "★ Karambit | Doppler" vs "... (Phase 2)".
       [...byName].find(([k]) => k.startsWith(base))?.[1];

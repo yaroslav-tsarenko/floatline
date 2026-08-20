@@ -1,5 +1,6 @@
 import { cache } from "react";
 
+import { memoTtl } from "@/lib/cache";
 import { db } from "@/lib/db";
 import { fxRates } from "@/lib/db/schema";
 import type { FxRates } from "@/lib/currency";
@@ -13,7 +14,8 @@ export type { FxRates };
  * missing rates are omitted so callers fall back to USD rather than showing a
  * price at an unknown rate. Never throws — on any DB error returns {}.
  */
-export const getFxRates = cache(async (): Promise<FxRates> => {
+export const getFxRates = cache((): Promise<FxRates> =>
+  memoTtl("fx:rates", 60_000, async () => {
   try {
     const rows = await db
       .select({
@@ -37,4 +39,5 @@ export const getFxRates = cache(async (): Promise<FxRates> => {
   } catch {
     return {};
   }
-});
+  }),
+);
