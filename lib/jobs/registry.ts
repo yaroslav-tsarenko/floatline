@@ -1,5 +1,6 @@
 import { env } from "@/lib/env";
 
+import { backfillImages } from "./backfill-images";
 import { checkBalance } from "./check-balance";
 import { expirePayments } from "./expire-payments";
 import { pollOrders } from "./poll-orders";
@@ -12,6 +13,14 @@ export const JOBS: Record<string, JobDef> = {
     name: "sync-catalog",
     run: syncCatalog,
     everyMinutes: env.SIH_SYNC_INTERVAL_MIN,
+    maxDurationSec: 300,
+  },
+  "backfill-images": {
+    name: "backfill-images",
+    run: backfillImages,
+    // Manual-only: never scheduled. Run from the admin panel when catalog
+    // images go missing (DB rebuild, batch of new arrivals not yet imaged).
+    everyMinutes: 0,
     maxDurationSec: 300,
   },
   "poll-orders": {

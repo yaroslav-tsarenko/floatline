@@ -1,5 +1,6 @@
 import { and, inArray, lt, or, isNull, sql } from "drizzle-orm";
 
+import { loadImageMap, type ImageMap } from "@/lib/catalog/image-map";
 import { parseName } from "@/lib/cs2/parseName";
 import { colorForRarity, resolveRarity } from "@/lib/cs2/rarity";
 import { db } from "@/lib/db";
@@ -17,13 +18,18 @@ function toNumeric(value: number | null | undefined): string | null {
 }
 
 /**
- * SIH returns either a Steam icon hash or a full URL to its own hotlink-blocked
- * CDN. Only keep bare Steam hashes; URLs are dropped so the image backfill can
- * fill a usable Steam hash instead.
+ * Resolve a renderable Steam icon hash for an item. SIH returns either a bare
+ * Steam hash (usable directly) or a URL to its own WAF-blocked CDN (unusable) —
+ * for the latter we look up a real Steam hash by name in the ByMykel catalog.
+ * Null when neither yields one; the upsert then keeps any existing hash.
  */
-function steamHashOnly(image: string | null | undefined): string | null {
-  if (!image || /^https?:\/\//i.test(image)) return null;
-  return image;
+function resolveImageHash(
+  image: string | null | undefined,
+  marketHashName: string,
+  imageMap: ImageMap | null,
+): string | null {
+  if (image && !/^https?:\/\//i.test(image)) return image;
+  return imageMap?.resolve(marketHashName) ?? null;
 }
 
 function chunk<T>(arr: T[], size: number): T[][] {
@@ -43,6 +49,11 @@ export async function syncCatalog(): Promise<JobStats> {
   const runStart = new Date();
   const catalog = await sih.getItems({ extended: true });
   const entries = Object.entries(catalog);
+
+  // SIH image URLs are unusable (WAF-blocked); resolve real Steam hashes by
+  // name so new items get artwork on first sync. Non-fatal: on fetch failure
+  // we keep whatever hash each row already has (the upsert coalesces).
+  const imageMap = await loadImageMap().catch(() => null);
 
   const rows: ItemRow[] = [];
   let availableCount = 0;
@@ -68,7 +79,7 @@ export async function syncCatalog(): Promise<JobStats> {
       rarity,
       rarityColor: v.color ?? colorForRarity(rarity),
       phase: v.phase ?? parsed.phase,
-      imageHash: steamHashOnly(v.image),
+      imageHash: resolveImageHash(v.image, marketHashName, imageMap),
       costPrice: toNumeric(cost),
       sellPrice: cost != null ? toNumeric(computeSellPrice(cost)) : null,
       steamPrice: toNumeric(v.steam ?? null),

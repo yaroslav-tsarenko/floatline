@@ -144,7 +144,9 @@ export default async function AdminPage() {
                   <Dot tone={tone} />
                   {c.job}
                 </span>
-                <span className="text-xs text-muted">every {c.everyMinutes}m</span>
+                <span className="text-xs text-muted">
+                  {c.everyMinutes > 0 ? `every ${c.everyMinutes}m` : "manual"}
+                </span>
                 <span className="text-xs text-muted">
                   last run {ago(c.lastStartedAt)}
                   {c.lastStatus ? ` · ${c.lastStatus}` : ""}
