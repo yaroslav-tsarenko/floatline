@@ -10,8 +10,8 @@ export const SITE = {
     "Floatline is a CS2 skins marketplace. See the float, compare the price, get it delivered to your Steam inventory in minutes.",
   contactEmail: "info@csfloatline.com",
   company: {
-    legalName: "BORGERSONIC OÜ",
-    registryCode: "17568868",
+    legalName: "PRONTOWARE OÜ",
+    registryCode: "17578967",
     street: "Tornimäe tn 7",
     district: "Kesklinna linnaosa",
     postalCode: "10145",
