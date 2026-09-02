@@ -9,6 +9,7 @@ export const SITE = {
   description:
     "Floatline is a CS2 skins marketplace. See the float, compare the price, get it delivered to your Steam inventory in minutes.",
   contactEmail: "info@csfloatline.com",
+  contactPhone: "+372 5912 2296",
   company: {
     legalName: "PRONTOWARE OÜ",
     registryCode: "17578967",
@@ -21,6 +22,8 @@ export const SITE = {
     countryCode: "EE",
   },
 } as const;
+
+export const CONTACT_PHONE_HREF = `tel:${SITE.contactPhone.replace(/\s+/g, "")}`;
 
 export const COMPANY_ADDRESS_LINES = [
   `${SITE.company.street}, ${SITE.company.district}`,

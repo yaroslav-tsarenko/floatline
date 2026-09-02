@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Wordmark } from "@/components/wordmark";
-import { COMPANY_ADDRESS_INLINE, SITE } from "@/lib/site";
+import { COMPANY_ADDRESS_INLINE, CONTACT_PHONE_HREF, SITE } from "@/lib/site";
 
 const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
@@ -58,6 +58,12 @@ export function Footer() {
           >
             <span className="size-1.5 rounded-full bg-positive" />
             {SITE.contactEmail}
+          </a>
+          <a
+            href={CONTACT_PHONE_HREF}
+            className="block text-xs text-muted hover:text-text"
+          >
+            {SITE.contactPhone}
           </a>
         </div>
 

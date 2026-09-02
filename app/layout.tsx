@@ -77,6 +77,7 @@ export default async function RootLayout({
     legalName: SITE.company.legalName,
     url: SITE.url,
     email: SITE.contactEmail,
+    telephone: SITE.contactPhone,
     identifier: SITE.company.registryCode,
     address: {
       "@type": "PostalAddress",

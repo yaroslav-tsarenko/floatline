@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { COMPANY_ADDRESS_LINES, SITE } from "@/lib/site";
+import { COMPANY_ADDRESS_LINES, CONTACT_PHONE_HREF, SITE } from "@/lib/site";
 
 export function ContentPage({
   title,
@@ -91,6 +91,16 @@ export function CompanyDetails({
             className="font-medium text-signal hover:underline"
           >
             {contactEmail}
+          </a>
+        </dd>
+
+        <dt className="text-muted">Phone</dt>
+        <dd>
+          <a
+            href={CONTACT_PHONE_HREF}
+            className="font-medium text-signal hover:underline"
+          >
+            {SITE.contactPhone}
           </a>
         </dd>
       </dl>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { ContentPage, Section } from "@/components/content-page";
-import { SITE } from "@/lib/site";
+import { CONTACT_PHONE_HREF, SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Support",
@@ -48,12 +48,20 @@ export default function SupportPage() {
           Real answers about float, delivery, and orders — usually within the
           hour.
         </p>
-        <a
-          href={`mailto:${SITE.contactEmail}`}
-          className="mt-3 inline-block rounded-md bg-signal px-4 py-2 text-sm font-medium text-white hover:brightness-110"
-        >
-          Email us
-        </a>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <a
+            href={`mailto:${SITE.contactEmail}`}
+            className="inline-block rounded-md bg-signal px-4 py-2 text-sm font-medium text-white hover:brightness-110"
+          >
+            Email us
+          </a>
+          <a
+            href={CONTACT_PHONE_HREF}
+            className="text-sm font-medium text-signal hover:underline"
+          >
+            {SITE.contactPhone}
+          </a>
+        </div>
       </div>
 
       <Section heading="Frequently asked">
