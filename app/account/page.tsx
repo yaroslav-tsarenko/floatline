@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 
 import { signOut } from "@/app/actions/auth";
+import { TopUpModal } from "@/components/account/topup-modal";
 import { TradeUrlForm } from "@/components/account/trade-url-form";
 import { Money } from "@/components/money";
 import { OrderStatusBadge } from "@/components/order-status-badge";
@@ -23,13 +24,14 @@ const TX_LABEL: Record<string, string> = {
 export default async function AccountPage({
   searchParams,
 }: {
-  searchParams: Promise<{ link?: string }>;
+  searchParams: Promise<{ link?: string; status?: string; ref?: string; pmt?: string }>;
 }) {
   const user = await getCurrentUser();
   if (!user) redirect("/signin");
 
-  const { link } = await searchParams;
+  const { link, status, ref, pmt } = await searchParams;
   const linkTaken = link === "taken";
+  const isReturn = status === "return" || status === "success";
   const hasSteam = !!user.steamId64;
 
   const [balance, txs, orders] = await Promise.all([
@@ -84,14 +86,36 @@ export default async function AccountPage({
         </Surface>
       )}
 
+      {isReturn && (
+        <Surface inset className="flex items-center justify-between gap-3 border-signal/30 bg-signal/10 p-4 text-sm text-text">
+          <div className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-signal animate-pulse" />
+            <span>
+              Payment received or processing. If your balance hasn't updated yet, it will reflect within seconds.
+            </span>
+          </div>
+          <Link
+            href="/account"
+            className="text-xs text-muted hover:text-text font-medium underline"
+          >
+            Dismiss
+          </Link>
+        </Surface>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2">
-        <Surface className="p-5">
-          <p className="text-xs uppercase tracking-widest text-muted">Balance</p>
-          <Money usd={Number(balance)} className="text-3xl font-semibold" />
-          <p className="mt-3 text-xs text-muted">
-            Top-ups require a configured payment provider. Balance is spent in
-            USD on purchases; refunds are credited back automatically.
-          </p>
+        <Surface className="flex flex-col justify-between p-5">
+          <div>
+            <div className="flex items-center justify-between">
+              <p className="text-xs uppercase tracking-widest text-muted">Balance</p>
+              <TopUpModal />
+            </div>
+            <Money usd={Number(balance)} className="mt-2 text-3xl font-semibold" />
+            <p className="mt-3 text-xs text-muted">
+              Top up via Transfermit card checkout or instant banking. Balance is spent in
+              USD on purchases; refunds are credited back automatically.
+            </p>
+          </div>
         </Surface>
 
         <Surface className="p-5">

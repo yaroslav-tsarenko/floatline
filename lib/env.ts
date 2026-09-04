@@ -33,6 +33,9 @@ const schema = z.object({
     .default("crypto"),
   PAYMENT_API_KEY: z.string().min(1),
   PAYMENT_WEBHOOK_SECRET: z.string().min(1),
+  TRANSFERMIT_API_URL: z.url().default("https://app.transfermit.com/api/v1/payments"),
+  TRANSFERMIT_API_KEY: z.string().optional(),
+  TRANSFERMIT_WEBHOOK_SECRET: z.string().optional(),
 
   FX_API_URL: z.url().default("https://api.frankfurter.app"),
   FX_BASE: z.string().default("USD"),
