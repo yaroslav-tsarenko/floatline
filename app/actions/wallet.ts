@@ -111,11 +111,14 @@ export async function createTopUpSession(
       .set({ status: "failed" })
       .where(eq(payments.id, paymentRow.id));
 
+    const errorMsg =
+      err?.message && !err.message.toLowerCase().includes("transfermit")
+        ? err.message
+        : "Payment provider is temporarily unavailable. Please try again.";
+
     return {
       ok: false,
-      error:
-        err?.message ||
-        "Payment provider is temporarily unavailable. Please try again.",
+      error: errorMsg,
     };
   }
 }

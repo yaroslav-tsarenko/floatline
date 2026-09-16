@@ -91,7 +91,7 @@ export function TopUpModal() {
         </div>
 
         <p className="text-xs text-muted">
-          Instant deposit powered by Transfermit (Visa, MasterCard, 3DSecure, Open Banking).
+          Instant deposit via card or open banking (Visa, MasterCard, 3DSecure).
         </p>
 
         <div className="space-y-3">
