@@ -112,7 +112,7 @@ export default async function AccountPage({
             </div>
             <Money usd={Number(balance)} className="mt-2 text-3xl font-semibold" />
             <p className="mt-3 text-xs text-muted">
-              Top up via Transfermit card checkout or instant banking. Balance is spent in
+              Top up with card or instant banking. Balance is spent in
               USD on purchases; refunds are credited back automatically.
             </p>
           </div>
