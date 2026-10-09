@@ -83,16 +83,18 @@ export default async function ItemPage({
         : item.discount;
   }
 
+  // Wallet balance drives the buy UI: balance-paid buys are gated on it here
+  // (and again, authoritatively, inside `createPurchase`), while the card path
+  // never touches it.
+  let balance: number | null = null;
   let buyState: BuyState = "guest";
   if (user) {
+    balance = Number(await getBalance(user.id));
     if (!user.steamId64) {
       buyState = "no_steam";
     } else if (!user.tradeToken) {
       buyState = "no_trade";
-    } else if (
-      item.sellPrice != null &&
-      Number(await getBalance(user.id)) < item.sellPrice
-    ) {
+    } else if (item.sellPrice != null && balance < item.sellPrice) {
       buyState = "insufficient";
     } else {
       buyState = "ready";
@@ -231,10 +233,11 @@ export default async function ItemPage({
                   marketHashName={item.marketHashName}
                   price={item.sellPrice}
                   state={buyState}
+                  balance={balance}
                 />
                 <p className="text-center text-xs text-muted">
-                  Charged in USD from your Floatline balance. Delivered to your
-                  Steam inventory in minutes.
+                  Pay from your Floatline balance or straight by card.
+                  Delivered to your Steam inventory in minutes.
                 </p>
                 {item.count <= 3 && (
                   <p className="text-center text-xs text-negative">

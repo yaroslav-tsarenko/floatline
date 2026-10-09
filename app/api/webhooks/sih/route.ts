@@ -28,6 +28,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const signature = readSignature(req);
   if (!verifyHmac(raw, signature, env.SIH_WEBHOOK_SECRET)) {
+    // Loud on purpose: a rejected delivery is the usual reason an order's status
+    // only moves when the buyer reloads the page. Says which case it is so the
+    // secret / header name can be fixed instead of guessed at.
+    console.error(
+      signature
+        ? "[webhook:sih] rejected: signature mismatch — check SIH_WEBHOOK_SECRET"
+        : `[webhook:sih] rejected: no signature header (looked for ${SIGNATURE_HEADERS.join(", ")})`,
+    );
     return NextResponse.json({ error: "invalid signature" }, { status: 401 });
   }
 

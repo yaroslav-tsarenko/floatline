@@ -12,6 +12,7 @@ import {
 import { createPurchase } from "@/lib/orders/purchase";
 import { submitOrder } from "@/lib/orders/submit";
 import { InsufficientFundsError } from "@/lib/wallet/errors";
+import { getBalance } from "@/lib/wallet/ledger";
 
 export type BuyResult =
   | { ok: false; error: string }
@@ -33,6 +34,18 @@ export async function buyItem(
     return { ok: false, error: "Link your Steam account before buying." };
   }
 
+  // Up-front site-balance gate so a buyer paying from balance gets the shortfall
+  // spelled out instead of a bare failure. `createPurchase` is still the
+  // authority: it re-checks under a row lock, which is what stops a race.
+  const balance = Number(await getBalance(user.id));
+  const price = Number(confirmedPrice);
+  if (Number.isFinite(price) && balance < price) {
+    return {
+      ok: false,
+      error: `Not enough balance: you have $${balance.toFixed(2)} and this skin costs $${price.toFixed(2)}. Top up $${(price - balance).toFixed(2)} or pay by card.`,
+    };
+  }
+
   let orderId: string;
   try {
     const purchase = await createPurchase({
@@ -46,7 +59,11 @@ export async function buyItem(
       return { ok: false, error: "Add your Steam trade link before buying." };
     }
     if (err instanceof InsufficientFundsError) {
-      return { ok: false, error: "Not enough balance. Top up and try again." };
+      return {
+        ok: false,
+        error:
+          "Not enough balance for this skin. Top up your balance or pay by card.",
+      };
     }
     if (err instanceof PriceChangedError) {
       return { ok: false, error: "The price just changed. Refresh and retry." };

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseTradeUrl } from "./trade-url";
+import { parseTradeUrl, tradeOfferUrl } from "./trade-url";
 
 describe("parseTradeUrl", () => {
   it("parses a valid trade URL", () => {
@@ -31,5 +31,19 @@ describe("parseTradeUrl", () => {
     expect(parseTradeUrl("https://steamcommunity.com/tradeoffer/new/?partner=abc&token=x")).toBeNull();
     expect(parseTradeUrl("not a url")).toBeNull();
     expect(parseTradeUrl("")).toBeNull();
+  });
+});
+
+describe("tradeOfferUrl", () => {
+  it("builds a link to the offer", () => {
+    expect(tradeOfferUrl("123456789")).toBe(
+      "https://steamcommunity.com/tradeoffer/123456789/",
+    );
+  });
+
+  it("returns null when the id is missing or not numeric", () => {
+    expect(tradeOfferUrl(null)).toBeNull();
+    expect(tradeOfferUrl("")).toBeNull();
+    expect(tradeOfferUrl("abc")).toBeNull();
   });
 });

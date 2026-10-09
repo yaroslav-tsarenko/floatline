@@ -26,3 +26,15 @@ export function parseTradeUrl(input: string): ParsedTradeUrl | null {
 
   return { partner, token };
 }
+
+/**
+ * Link to an incoming Steam trade offer by its id, so the buyer can open the
+ * exact offer SIH dispatched instead of digging through their offer list.
+ * Returns null for an unusable id (SIH omits it until the offer is sent).
+ */
+export function tradeOfferUrl(offerId: string | null | undefined): string | null {
+  if (!offerId) return null;
+  const id = String(offerId).trim();
+  if (!/^\d+$/.test(id)) return null;
+  return `https://steamcommunity.com/tradeoffer/${id}/`;
+}
