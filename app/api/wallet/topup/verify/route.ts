@@ -41,10 +41,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     }
 
     if (localPayment.status === "paid") {
+      const orderId = (localPayment.raw as any)?.orderId;
       return NextResponse.json({
         ok: true,
         status: "paid",
         paymentId: localPayment.id,
+        orderId,
       });
     }
 
@@ -73,6 +75,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             ok: true,
             status: "paid",
             paymentId: creditOutcome.paymentId,
+            orderId: creditOutcome.orderId,
           });
         }
       } else if (

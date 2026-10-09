@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/auth/session";
+import { env } from "@/lib/env";
 import {
   ItemUnavailableError,
   NoTradeTargetError,
@@ -64,4 +65,43 @@ export async function buyItem(
   }
 
   redirect(`/orders/${orderId}`);
+}
+
+export type BuyDirectResult =
+  | { ok: true; redirectUrl: string }
+  | { ok: false; error: string };
+
+/**
+ * Initiates direct card checkout for a specific skin via Transfermit without
+ * using wallet balance. Returns redirectUrl to hosted checkout.
+ */
+export async function buyItemDirect(
+  marketHashName: string,
+  confirmedPrice?: string,
+): Promise<BuyDirectResult> {
+  const user = await getCurrentUser();
+  if (!user) return { ok: false, error: "Please sign in to buy." };
+  if (!user.steamId64 || !user.tradeToken) {
+    return { ok: false, error: "Link your Steam trade URL before buying." };
+  }
+
+  try {
+    const res = await fetch(`${env.APP_URL}/api/skins/purchase`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ marketHashName, confirmedPrice }),
+    });
+
+    const json = await res.json();
+    if (!res.ok || !json.ok) {
+      return { ok: false, error: json.error || "Failed to initiate payment." };
+    }
+
+    return { ok: true, redirectUrl: json.redirectUrl };
+  } catch (err: any) {
+    return {
+      ok: false,
+      error: err?.message || "Failed to initiate direct payment.",
+    };
+  }
 }
