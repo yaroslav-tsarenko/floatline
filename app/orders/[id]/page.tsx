@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 
 import { Money } from "@/components/money";
+import { OrderLiveStatus } from "@/components/order-live-status";
 import { OrderStatusBadge } from "@/components/order-status-badge";
 import { SkinImage } from "@/components/skin-image";
 import { Surface } from "@/components/ui/surface";
@@ -10,6 +11,7 @@ import { getOrderForUser } from "@/lib/account";
 import { getCurrentUser } from "@/lib/auth/session";
 import { itemSlug } from "@/lib/catalog/slug";
 import { isOpenStatus, reconcileOrderNow } from "@/lib/orders/lazy";
+import { tradeOfferUrl } from "@/lib/steam/trade-url";
 
 export const metadata: Metadata = { title: "Order" };
 
@@ -37,6 +39,8 @@ export default async function OrderPage({
   const { order, events } = data;
   const refunded = REFUNDED.has(order.status);
   const delivered = order.status === "finished";
+  const open = isOpenStatus(order.status);
+  const offerUrl = tradeOfferUrl(order.senderOfferId);
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-10">
@@ -70,7 +74,7 @@ export default async function OrderPage({
         </div>
       </Surface>
 
-      <Surface className="p-4 text-sm">
+      <Surface className="space-y-3 p-4 text-sm">
         {delivered && (
           <p className="text-positive">
             Delivered. The trade offer{" "}
@@ -87,10 +91,30 @@ export default async function OrderPage({
         )}
         {!delivered && !refunded && (
           <p className="text-muted">
-            We&apos;re fulfilling this order. A Steam trade offer will arrive
-            shortly — keep an eye on your inventory.
+            {offerUrl
+              ? "Your Steam trade offer is waiting — accept it to receive the skin."
+              : "We\u2019re fulfilling this order. A Steam trade offer will arrive shortly \u2014 keep an eye on your inventory."}
           </p>
         )}
+
+        {offerUrl && !refunded && (
+          <div className="space-y-1">
+            <a
+              href={offerUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-signal px-4 text-sm font-medium text-white hover:brightness-110"
+            >
+              {delivered ? "View the trade offer" : "Open the trade offer"}
+            </a>
+            <p className="text-xs text-muted">
+              Offer #{order.senderOfferId}
+              {order.senderNickname ? ` from ${order.senderNickname}` : ""}
+            </p>
+          </div>
+        )}
+
+        {open && <OrderLiveStatus orderId={order.id} status={order.status} />}
       </Surface>
 
       <section className="space-y-2">

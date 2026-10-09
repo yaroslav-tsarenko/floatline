@@ -75,6 +75,8 @@ export async function getUserOrders(
 export interface OrderDetail extends OrderView {
   sihStatus: string | null;
   sihError: string | null;
+  /** Steam trade offer id SIH reports once the offer is dispatched. */
+  senderOfferId: string | null;
   senderNickname: string | null;
   finishedAt: Date | null;
   submittedAt: Date | null;
@@ -121,6 +123,7 @@ export async function getOrderForUser(
       snapshot: (row.itemSnapshot ?? {}) as OrderSnapshot,
       sihStatus: row.sihStatus,
       sihError: row.sihError,
+      senderOfferId: row.senderOfferId,
       senderNickname: row.senderNickname,
       finishedAt: row.finishedAt,
       submittedAt: row.submittedAt,
