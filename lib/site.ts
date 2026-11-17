@@ -11,24 +11,23 @@ export const SITE = {
   contactEmail: "info@csfloatline.com",
   contactPhone: "+372 5912 2296",
   company: {
-    legalName: "PRONTOWARE OÜ",
-    registryCode: "17578967",
-    street: "Tornimäe tn 7",
-    district: "Kesklinna linnaosa",
-    postalCode: "10145",
-    city: "Tallinn",
-    region: "Harju maakond",
-    country: "Estonia",
-    countryCode: "EE",
+    legalName: "CROWNSTONE PARTNERS LTD",
+    companyNumber: "17452360",
+    street: "Dept 6956, 43 Owston Road",
+    locality: "Carcroft",
+    city: "Doncaster",
+    postalCode: "DN6 8DA",
+    country: "United Kingdom",
+    countryCode: "GB",
   },
 } as const;
 
 export const CONTACT_PHONE_HREF = `tel:${SITE.contactPhone.replace(/\s+/g, "")}`;
 
 export const COMPANY_ADDRESS_LINES = [
-  `${SITE.company.street}, ${SITE.company.district}`,
-  `${SITE.company.postalCode} ${SITE.company.city}, ${SITE.company.region}`,
+  `${SITE.company.street}, ${SITE.company.locality}`,
+  `${SITE.company.city} ${SITE.company.postalCode}`,
   SITE.company.country,
 ];
 
-export const COMPANY_ADDRESS_INLINE = `${SITE.company.street}, ${SITE.company.district}, ${SITE.company.postalCode} ${SITE.company.city}, ${SITE.company.region}, ${SITE.company.country}`;
+export const COMPANY_ADDRESS_INLINE = `${SITE.company.street}, ${SITE.company.locality}, ${SITE.company.city}, ${SITE.company.country}, ${SITE.company.postalCode}`;

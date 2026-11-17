@@ -78,13 +78,12 @@ export default async function RootLayout({
     url: SITE.url,
     email: SITE.contactEmail,
     telephone: SITE.contactPhone,
-    identifier: SITE.company.registryCode,
+    identifier: SITE.company.companyNumber,
     address: {
       "@type": "PostalAddress",
-      streetAddress: SITE.company.street,
+      streetAddress: `${SITE.company.street}, ${SITE.company.locality}`,
       addressLocality: SITE.company.city,
       postalCode: SITE.company.postalCode,
-      addressRegion: SITE.company.region,
       addressCountry: SITE.company.countryCode,
     },
   };

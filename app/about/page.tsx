@@ -53,7 +53,7 @@ export default function AboutPage() {
 
       <CompanyDetails
         heading="Who operates Floatline"
-        intro="Floatline is operated by an Estonian company, registered in the Estonian Commercial Register."
+        intro="Floatline is operated by a UK private limited company, registered at Companies House."
       />
 
       <p className="text-sm text-muted">

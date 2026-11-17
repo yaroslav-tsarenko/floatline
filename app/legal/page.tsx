@@ -19,7 +19,7 @@ export default function LegalPage() {
     >
       <CompanyDetails
         heading="1. Website operator"
-        intro={`Legal form: Estonian private limited company (osaühing / OÜ). Registered in the Estonian Commercial Register.`}
+        intro={`Legal form: private limited company (Ltd). Registered at Companies House (England and Wales).`}
       />
 
       <Section heading="2. Business activity">
