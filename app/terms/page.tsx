@@ -15,7 +15,7 @@ export default function TermsPage() {
     <ContentPage
       title="Terms of Service"
       intro={`These Terms govern access to and use of ${SITE.domain}, ${SITE.name} accounts and purchases of Counter-Strike 2 digital items from ${SITE.company.legalName}. By creating an account, placing an order or otherwise using the Service, you confirm that you have read, understood and agreed to these Terms. If you do not agree, you must not use the Service.`}
-      updated="August 2026"
+      updated="November 2026"
     >
       <CompanyDetails
         heading="1. Operator and definitions"
@@ -414,30 +414,33 @@ export default function TermsPage() {
           will be answered within 15 days.
         </p>
         <p>
-          An eligible consumer may refer an unresolved dispute to the Consumer
-          Disputes Committee of the Estonian Consumer Protection and Technical
-          Regulatory Authority:{" "}
+          If a complaint cannot be resolved, consumers in the United Kingdom can
+          get free advice from the Citizens Advice consumer service:{" "}
           <a
-            href="https://ttja.ee/en/consumer-disputes-committee"
+            href="https://www.citizensadvice.org.uk/consumer/"
             className="text-signal hover:underline"
             rel="noreferrer noopener"
             target="_blank"
           >
-            https://ttja.ee/en/consumer-disputes-committee
+            https://www.citizensadvice.org.uk/consumer/
           </a>
-          . Consumers in another European Union country may seek assistance from
-          their European Consumer Centre where applicable.
+          . We do not currently use an alternative dispute resolution provider.
+          Consumers resident outside the United Kingdom may also contact the
+          consumer bodies of their country of residence.
         </p>
       </Section>
 
       <Section heading="21. Governing law">
         <p>
-          These Terms and contracts concluded under them are governed by Estonian
-          law. A consumer retains mandatory protections of the law of their
-          habitual residence where those protections apply regardless of this
-          choice. Subject to mandatory consumer jurisdiction rules, disputes are
-          subject to the competent courts of Estonia; consumers may also have the
-          right to bring proceedings in their country of habitual residence.
+          These Terms and contracts concluded under them are governed by the laws
+          of England and Wales. A consumer retains mandatory protections of the
+          law of their habitual residence where those protections apply
+          regardless of this choice. Subject to mandatory consumer jurisdiction
+          rules, disputes are subject to the courts of England and Wales;
+          consumers resident in Scotland or Northern Ireland may bring
+          proceedings in their local courts, and consumers elsewhere may also
+          have the right to bring proceedings in their country of habitual
+          residence.
         </p>
       </Section>
 

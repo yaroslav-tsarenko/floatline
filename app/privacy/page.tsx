@@ -14,7 +14,7 @@ export default function PrivacyPage() {
     <ContentPage
       title="Privacy Policy"
       intro={`This Policy explains how ${SITE.company.legalName} collects and uses personal data when you create an account, use Steam Login, purchase Items or contact ${SITE.name}.`}
-      updated="August 2026"
+      updated="November 2026"
     >
       <CompanyDetails
         heading="1. Controller"
@@ -165,10 +165,11 @@ export default function PrivacyPage() {
 
       <Section heading="7. International transfers">
         <p>
-          Some recipients may process data outside Estonia or the European
-          Economic Area. Where required, we use a lawful transfer mechanism such as
-          an adequacy decision, standard contractual clauses or another safeguard
-          recognised under applicable data protection law. Information about
+          Some recipients may process data outside the United Kingdom. Where
+          required, we use a lawful transfer mechanism such as UK adequacy
+          regulations, the International Data Transfer Agreement, the UK Addendum
+          to the EU standard contractual clauses or another safeguard recognised
+          under the UK GDPR and the Data Protection Act 2018. Information about
           relevant safeguards may be requested at {SITE.contactEmail}.
         </p>
       </Section>
@@ -185,8 +186,8 @@ export default function PrivacyPage() {
           </li>
           <li>
             order, invoice, accounting and transaction records are retained for
-            seven years from the end of the relevant financial year where required
-            by Estonian accounting or tax law;
+            six years from the end of the relevant financial year where required
+            by UK company or tax law;
           </li>
           <li>
             support and complaint records are normally retained for three years
@@ -251,14 +252,14 @@ export default function PrivacyPage() {
             {SITE.contactEmail}
           </a>{" "}
           first so we can address your concern. You also have the right to complain
-          to the Estonian Data Protection Inspectorate at{" "}
+          to the Information Commissioner’s Office (ICO) at{" "}
           <a
-            href="https://www.aki.ee/en"
+            href="https://ico.org.uk/make-a-complaint/"
             className="text-signal hover:underline"
             rel="noreferrer noopener"
             target="_blank"
           >
-            https://www.aki.ee/en
+            https://ico.org.uk/make-a-complaint/
           </a>{" "}
           or to the competent supervisory authority in your country of residence.
         </p>

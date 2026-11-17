@@ -15,7 +15,7 @@ export default function LegalPage() {
     <ContentPage
       title="Legal Notice"
       intro={`This Notice identifies the operator of ${SITE.name} and provides the principal legal and contact information for ${SITE.domain}.`}
-      updated="August 2026"
+      updated="November 2026"
     >
       <CompanyDetails
         heading="1. Website operator"
@@ -117,18 +117,19 @@ export default function LegalPage() {
           15 days.
         </p>
         <p>
-          An eligible consumer may refer an unresolved contractual dispute to the
-          Consumer Disputes Committee of the Estonian Consumer Protection and
-          Technical Regulatory Authority:{" "}
+          If a complaint cannot be resolved, consumers in the United Kingdom can
+          get free advice from the Citizens Advice consumer service:{" "}
           <a
-            href="https://ttja.ee/en/consumer-disputes-committee"
+            href="https://www.citizensadvice.org.uk/consumer/"
             className="text-signal hover:underline"
             rel="noreferrer noopener"
             target="_blank"
           >
-            https://ttja.ee/en/consumer-disputes-committee
+            https://www.citizensadvice.org.uk/consumer/
           </a>
-          .
+          . We do not currently use an alternative dispute resolution provider.
+          This does not affect your right to bring a claim before the courts of
+          the United Kingdom.
         </p>
       </Section>
 

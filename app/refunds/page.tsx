@@ -15,7 +15,7 @@ export default function RefundsPage() {
     <ContentPage
       title="Refund, Cancellation and Withdrawal Policy"
       intro="This Policy explains when an order may be cancelled, when a full refund is available and how statutory withdrawal rights apply to immediate digital delivery."
-      updated="August 2026"
+      updated="November 2026"
     >
       <Section heading="1. General principle">
         <p>
@@ -104,8 +104,9 @@ export default function RefundsPage() {
 
       <Section heading="8. Statutory withdrawal rights">
         <p>
-          Consumers may have a statutory right to withdraw from certain distance
-          contracts within 14 days. Different rules may apply where digital content
+          Under the Consumer Contracts (Information, Cancellation and Additional
+          Charges) Regulations 2013, consumers may have a statutory right to
+          cancel certain distance contracts within 14 days. Different rules may apply where digital content
           is supplied immediately and not on a tangible medium.
         </p>
         <p>
@@ -117,7 +118,8 @@ export default function RefundsPage() {
         <p>
           A withdrawal right is lost only where the legal requirements for that loss
           have been satisfied. If those requirements were not satisfied, or if
-          mandatory law grants another remedy, this Policy does not restrict it.
+          mandatory law grants another remedy, including under the Consumer
+          Rights Act 2015, this Policy does not restrict it.
         </p>
       </Section>
 
@@ -181,18 +183,18 @@ export default function RefundsPage() {
 
       <Section heading="12. Complaints">
         <p>
-          Written consumer complaints are answered within 15 days. If an eligible
-          consumer dispute remains unresolved, the consumer may contact the Consumer
-          Disputes Committee through{" "}
+          Written consumer complaints are answered within 15 days. If a consumer
+          dispute remains unresolved, consumers in the United Kingdom can get free
+          advice from the Citizens Advice consumer service:{" "}
           <a
-            href="https://ttja.ee/en/consumer-disputes-committee"
+            href="https://www.citizensadvice.org.uk/consumer/"
             className="text-signal hover:underline"
             rel="noreferrer noopener"
             target="_blank"
           >
-            https://ttja.ee/en/consumer-disputes-committee
+            https://www.citizensadvice.org.uk/consumer/
           </a>
-          .
+          . We do not currently use an alternative dispute resolution provider.
         </p>
       </Section>
 
