@@ -88,7 +88,8 @@ export function Footer() {
       <div className="border-t border-border">
         <div className="mx-auto max-w-7xl space-y-1 px-4 py-4 text-xs text-muted">
           <p className="text-text/80">
-            {SITE.company.legalName} · Registry code {SITE.company.registryCode}
+            {SITE.company.legalName} · {SITE.company.registrationLabel}{" "}
+            {SITE.company.registrationNumber}
           </p>
           <address className="not-italic">{COMPANY_ADDRESS_INLINE}</address>
           <div className="flex flex-col gap-1 pt-1 sm:flex-row sm:items-center sm:justify-between">
