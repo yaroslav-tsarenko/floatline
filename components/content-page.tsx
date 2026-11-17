@@ -70,8 +70,8 @@ export function CompanyDetails({
         <dt className="text-muted">Company</dt>
         <dd className="font-medium text-text">{company.legalName}</dd>
 
-        <dt className="text-muted">Registry code</dt>
-        <dd className="font-medium text-text">{company.registryCode}</dd>
+        <dt className="text-muted">{company.registrationLabel}</dt>
+        <dd className="font-medium text-text">{company.registrationNumber}</dd>
 
         <dt className="text-muted">Registered address</dt>
         <dd className="text-text">
